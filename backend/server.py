@@ -29,6 +29,18 @@ def login():
         return {"success": True, "message": "Login successful", "user": {"username": user[1], "email": user[2]}}
     else:
         return {"error": "Invalid email or password"}, 401
+    
+@app.route("/add", methods=["POST"])
+def add_transaction():
+    data = request.get_json()
+    amount = data.get("amount")
+    description = data.get("description")
+    category = data.get("category")
+    date = data.get("date")
+    user_id = data.get("user_id")
+    if not amount or not category or not date:
+        return {"error": "Missing fields"}, 400
+    projectdb.add_transaction(user_id, amount, description, category, date)
 
 if __name__ == "__main__":
     app.run(debug=True)
