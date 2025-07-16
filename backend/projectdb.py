@@ -20,3 +20,7 @@ def logIn(email, password):
 def add_transaction(user_id, amount, description, category, date):
     mycursor.execute("INSERT INTO transactions (user_id, amount, description, category, date) VALUES (%s, %s, %s, %s, %s)", (user_id, amount, description, category, date))
     mydb.commit()
+
+def delete_transaction(transaction_id):
+    mycursor.execute("DELETE FROM transactions WHERE id=%s", (transaction_id,))
+    mydb.commit()    
