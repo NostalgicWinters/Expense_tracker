@@ -23,4 +23,8 @@ def add_transaction(user_id, amount, description, category, date):
 
 def delete_transaction(transaction_id):
     mycursor.execute("DELETE FROM transactions WHERE id=%s", (transaction_id,))
-    mydb.commit()    
+    mydb.commit()   
+
+def view_transactions(user_id):
+    mycursor.execute("SELECT * FROM transactions WHERE user_id=%s", (user_id,))
+    return mycursor.fetchall() 

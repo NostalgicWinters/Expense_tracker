@@ -41,6 +41,7 @@ def add_transaction():
     if not amount or not category or not date:
         return {"error": "Missing fields"}, 400
     projectdb.add_transaction(user_id, amount, description, category, date)
+    return {"success": True, "message": "Transaction added successfully"}
 
 @app.route("/delete", methods=["POST"])
 def delete_transaction():
@@ -49,7 +50,17 @@ def delete_transaction():
     if not transaction_id:
         return {"error": "Missing transaction id"}, 400
     projectdb.delete_transaction(transaction_id)
-    
+    return {"success": True, "message": "Transaction deleted successfully"}
+
+@app.route("/view", methods=["POST"])
+def view_transactions():
+    data = request.get_json()
+    user_id = data.get("user_id")
+    if not user_id:
+        return {"error": "Missing user id"}, 400
+    projectdb.view_transactions(user_id)
+    transactions = projectdb.mycursor.fetchall()
+    return jsonify(transactions)
 
 if __name__ == "__main__":
     app.run(debug=True)
