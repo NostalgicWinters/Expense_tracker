@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+import projectdb
 
 app = Flask(__name__)
 CORS(app)
@@ -12,6 +13,22 @@ def signup():
     password = data.get("password")
     if not username or not email or not password:
         return {"error": "Missing fields"}, 400
+    projectdb.signUp(username, email, password)
+    return {"success": True, "message": "User signed up successfully"}
+
+@app.route("/login", methods=["POST"])
+def login():
+    data = request.get_json()
+    email = data.get("email")
+    password = data.get("password")
+    if not email or not password:
+        return {"error": "Missing feilds"}, 400
+    projectdb.logIn(email, password)
+    user = projectdb.mycursor.fetchone()
+    if user:
+        return {"success": True, "message": "Login successful", "user": {"username": user[1], "email": user[2]}}
+    else:
+        return {"error": "Invalid email or password"}, 401
 
 if __name__ == "__main__":
     app.run(debug=True)
