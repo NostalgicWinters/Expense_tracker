@@ -42,5 +42,14 @@ def add_transaction():
         return {"error": "Missing fields"}, 400
     projectdb.add_transaction(user_id, amount, description, category, date)
 
+@app.route("/delete", methods=["POST"])
+def delete_transaction():
+    data = request.get_json()
+    transaction_id = data.get("id")
+    if not transaction_id:
+        return {"error": "Missing transaction id"}, 400
+    projectdb.delete_transaction(transaction_id)
+    
+
 if __name__ == "__main__":
     app.run(debug=True)
