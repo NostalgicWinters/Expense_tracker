@@ -62,5 +62,14 @@ def view_transactions():
     transactions = projectdb.mycursor.fetchall()
     return jsonify(transactions)
 
+@app.route("/search", methods=["POST"])
+def search_transacttions():
+    data = request.get_json()
+    user_id = data.get("user_id")
+    category = data.get("category")
+    if not user_id:
+        return {"error": "Missing user id"}, 400
+    return jsonify(projectdb.search_transactions(user_id, category))
+
 if __name__ == "__main__":
     app.run(debug=True)

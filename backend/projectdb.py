@@ -36,3 +36,10 @@ def delete_transaction(transaction_id, amount, user_id):
 def view_transactions(user_id):
     mycursor.execute("SELECT * FROM transactions WHERE user_id=%s", (user_id,))
     return mycursor.fetchall() 
+
+def search_transactions(user_id, category):
+    if category is None:
+        mycursor.execute("SELECT * FROM transactions WHERE user_id=%s", (user_id,))
+    else:
+        mycursor.execute("SELECT * FROM transactions WHERE user_id=%s AND category=%s", (user_id, category))
+    return mycursor.fetchall()
